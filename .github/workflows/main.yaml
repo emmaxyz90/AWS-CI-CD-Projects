@@ -80,7 +80,7 @@ jobs:
         with:
           mode: start
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-          ec2-image-id: ami-0ebfd941bbafe70c6
+          ec2-image-id: ami-0e86e20dae9224db8
           ec2-instance-type: t3.nano
           subnet-id: subnet-0b1b924813d026cc1
           security-group-id: sg-0b29a8b01492d5704
@@ -94,7 +94,7 @@ jobs:
                  # sudo yum install docker git libicu -y
                  # sudo systemctl enable docker
                  # sudo apt-get update -y
-          # iam-role-name: my-role-name # optional, requires additional permissions
+          iam-role-name: myCustomRole # optional, requires additional permissions
           # aws-resource-tags: > # optional, requires additional permissions
           #   [
           #     {"Key": "Name", "Value": "ec2-github-runner"},
