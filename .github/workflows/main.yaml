@@ -91,6 +91,21 @@ jobs:
                  sudo sh get-docker.sh
                  sudo usermod -aG docker ubuntu
                  newgrp docker
+                 export RUNNER_ALLOW_RUNASROOT=true
+                 mkdir actions-runner
+                  cd actions-runner
+                  curl -O -L https://github.com/actions/runner/releases/download/v2.262.1/actions-runner-linux-x64-2.262.1.tar.gz
+                  tar xzf ./actions-runner-linux-x64-2.262.1.tar.gz
+                  PAT= ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+                  token=$(curl -s -XPOST \
+                      -H "authorization: token $PAT" \
+                      https://api.github.com/repos/emmaxyz90/AWS-CI-CD-Projects/actions/runners/registration-token |\
+                      jq -r .token)
+                  sudo chown ec2-user -R /actions-runner
+                  ./config.sh --url https://github.com/emmaxyz90/AWS-CI-CD-Projects --token $token --name "my-runner-$(hostname)" --work _work
+                  sudo ./svc.sh install
+                  sudo ./svc.sh start
+                  sudo chown ec2-user -R /actions-runner
                  # sudo yum install docker git libicu -y
                  # sudo systemctl enable docker
                  # sudo apt-get update -y
