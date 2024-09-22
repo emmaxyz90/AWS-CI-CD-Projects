@@ -80,35 +80,15 @@ jobs:
         with:
           mode: start
           github-token: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-          ec2-image-id: ami-0e86e20dae9224db8
+          ec2-image-id: ami-0ebfd941bbafe70c6
           ec2-instance-type: t3.nano
           subnet-id: subnet-0b1b924813d026cc1
           security-group-id: sg-0b29a8b01492d5704
           pre-runner-script: |
-                 sudo yum update -y && \ 
-                 sudo apt-get upgrade
-                 curl -fsSL https://get.docker.com -o get-docker.sh
-                 sudo sh get-docker.sh
-                 sudo usermod -aG docker ubuntu
-                 newgrp docker
-                 export RUNNER_ALLOW_RUNASROOT=true
-                 mkdir actions-runner
-                  cd actions-runner
-                  curl -O -L https://github.com/actions/runner/releases/download/v2.262.1/actions-runner-linux-x64-2.262.1.tar.gz
-                  tar xzf ./actions-runner-linux-x64-2.262.1.tar.gz
-                  PAT= ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-                  token=$(curl -s -XPOST \
-                      -H "authorization: token $PAT" \
-                      https://api.github.com/repos/emmaxyz90/AWS-CI-CD-Projects/actions/runners/registration-token |\
-                      jq -r .token)
-                  sudo chown ec2-user -R /actions-runner
-                  ./config.sh --url https://github.com/emmaxyz90/AWS-CI-CD-Projects --token $token --name "my-runner-$(hostname)" --work _work
-                  sudo ./svc.sh install
-                  sudo ./svc.sh start
-                  sudo chown ec2-user -R /actions-runner
-                 # sudo yum install docker git libicu -y
-                 # sudo systemctl enable docker
-                 # sudo apt-get update -y
+                sudo yum update -y && \
+                 sudo yum install docker git libicu -y
+                 sudo systemctl enable docker
+                 sudo apt-get update -y
           iam-role-name: myCustomRole # optional, requires additional permissions
           # aws-resource-tags: > # optional, requires additional permissions
           #   [
